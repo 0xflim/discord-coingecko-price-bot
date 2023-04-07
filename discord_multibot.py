@@ -159,10 +159,12 @@ async def refresh_data():
         nick, name = await get_data(i)
         await asyncio.sleep(3)
         for guild in clients[i].guilds:
-            if nick and name == "":
+            if nick == "":
+                print(f"nick in if: {nick}")
                 await asyncio.sleep(5)
                 pass
             else:
+                print(f"nick in else: {nick}")
                 await guild.me.edit(nick=nick)
                 await clients[i].change_presence(
                     activity=Activity(
