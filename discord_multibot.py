@@ -110,7 +110,7 @@ for i in range(len(bot_tokens)):
             )
             exit()
         token_name = r.json()["symbol"].upper()
-    time.sleep(1.5)  # protect against rate limiting
+    time.sleep(2)  # protect against rate limiting
     tickers.append(token_name)
     print(f"{str(dt.utcnow())[:-7]} | Found {token_name}/{attributes[i][3].upper()}.")
 
