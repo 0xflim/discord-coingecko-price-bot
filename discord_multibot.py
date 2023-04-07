@@ -156,13 +156,17 @@ async def refresh_data():
         nick, name = await get_data(i)
         await asyncio.sleep(3)
         for guild in clients[i].guilds:
-            await guild.me.edit(nick=nick)
-            await clients[i].change_presence(
-                activity=Activity(
-                    name=name,
-                    type=ActivityType.watching,
+            if nick or name == "":
+                await asyncio.sleep(5)
+                pass
+            else:
+                await guild.me.edit(nick=nick)
+                await clients[i].change_presence(
+                    activity=Activity(
+                        name=name,
+                        type=ActivityType.watching,
+                    )
                 )
-            )
 
 
 async def get_data(i):
@@ -422,16 +426,22 @@ async def get_data(i):
                         "nickname permissions for the bot!"
                     )
                 errored_guilds.append(guild)
+                nick, name = ""
             except Exception as e:
                 print(f"{str(dt.utcnow())[:-7]} | Unknown error: {e}.")
+                nick, name = ""
     except ValueError as e:
         print(f"{str(dt.utcnow())[:-7]} | ValueError: {e}.")
+        nick, name = ""
     except TypeError as e:
         print(f"{str(dt.utcnow())[:-7]} | TypeError: {e}.")
+        nick, name = ""
     except OSError as e:
         print(f"{str(dt.utcnow())[:-7]} | OSError: {e}.")
+        nick, name = ""
     except Exception as e:
         print(f"{dt.utcnow()} | Unknown error: {e}.")
+        nick, name = ""
     return nick, name
 
 
