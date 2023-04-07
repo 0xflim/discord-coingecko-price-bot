@@ -108,6 +108,9 @@ for i in range(len(bot_tokens)):
                 f"{str(dt.utcnow())[:-7]} | Error {status_code}."
                 + f" Could not find {attributes[i][0]}. Exiting...\n"
             )
+            if status_code == 429:
+                print(f"{str(dt.utcnow())[:-7]} | Waiting 60 seconds before exit...")
+                time.sleep(60)
             exit()
         token_name = r.json()["symbol"].upper()
     time.sleep(2)  # protect against rate limiting
