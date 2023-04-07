@@ -159,7 +159,7 @@ async def refresh_data():
         nick, name = await get_data(i)
         await asyncio.sleep(3)
         for guild in clients[i].guilds:
-            if nick or name == "":
+            if nick and name == "":
                 await asyncio.sleep(5)
                 pass
             else:
