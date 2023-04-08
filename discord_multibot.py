@@ -455,7 +455,7 @@ async def get_data(i):
     except Exception as e:
         print(f"{dt.utcnow()} | Unknown error outside update: {e}.")
         nick, name = ""
-        return nick, name
+
     return nick, name
 
 
@@ -463,7 +463,9 @@ async def get_data(i):
 # Run the clients forever
 ################################################################################
 loop = asyncio.new_event_loop()
+t = []
 for i in range(len(clients)):
-    loop.create_task(clients[i].start(bot_tokens[i]))
+    t.append(loop.create_task(clients[i].start(bot_tokens[i])))
+    print(t[i])
 loop.run_forever()
 ################################################################################
