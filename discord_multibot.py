@@ -153,7 +153,7 @@ async def on_ready():
     refresh_data.start()
 
 
-# @tasks.loop(seconds=float(10))
+@tasks.loop(seconds=float(10))
 async def refresh_data():
     for i in range(len(clients)):
         nick, name = await get_data(i)
