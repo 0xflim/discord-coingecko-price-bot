@@ -443,7 +443,6 @@ async def get_data(i):
                         f"{str(dt.utcnow())[:-7]} | Unknown error within update: {e}."
                     )
                     nick, name = ""
-                    break
     except ValueError as e:
         print(f"{str(dt.utcnow())[:-7]} | ValueError: {e}.")
         nick, name = ""
@@ -456,6 +455,7 @@ async def get_data(i):
     except Exception as e:
         print(f"{dt.utcnow()} | Unknown error outside update: {e}.")
         nick, name = ""
+        next(loop.__await__())
     return nick, name
 
 
