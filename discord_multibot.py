@@ -437,36 +437,33 @@ async def get_data(i):
                             "nickname permissions for the bot!"
                         )
                     errored_guilds.append(guild)
-                    nick, name = ""
+                    nick = ""
+                    name = ""
                     break
                 except Exception as e:
                     print(
                         f"{str(dt.utcnow())[:-7]} | Unknown error within update: {e}."
                     )
                     print(nick, name)
-                    nick, name = ""
+                    nick = ""
+                    name = ""
     except ValueError as e:
         print(f"{str(dt.utcnow())[:-7]} | ValueError: {e}.")
-        nick, name = ""
+        nick = ""
+        name = ""
     except TypeError as e:
         print(f"{str(dt.utcnow())[:-7]} | TypeError: {e}.")
-        nick, name = ""
+        nick = ""
+        name = ""
     except OSError as e:
         print(f"{str(dt.utcnow())[:-7]} | OSError: {e}.")
-        nick, name = ""
+        nick = ""
+        name = ""
     except Exception as e:
         print(f"{dt.utcnow()} | Unknown error outside update: {e}.")
         nick = ""
         name = ""
     finally:
-        print(f"nick: {nick}")
-        print(f"name: {name}")
-
-        print("got to finally")
-
-        print(f"nick: {nick}")
-        print(f"name: {name}")
-
         return nick, name
 
 
