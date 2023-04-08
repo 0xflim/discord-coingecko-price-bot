@@ -458,8 +458,14 @@ async def get_data(i):
         print(f"{dt.utcnow()} | Unknown error outside update: {e}.")
         nick, name = ""
     finally:
+        print(f"nick: {nick}")
+        print(f"name: {name}")
+
         print("got to finally")
-        print(nick, name)
+
+        print(f"nick: {nick}")
+        print(f"name: {name}")
+
         return nick, name
 
 
