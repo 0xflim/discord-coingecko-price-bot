@@ -456,7 +456,8 @@ async def get_data(i):
         nick, name = ""
     except Exception as e:
         print(f"{dt.utcnow()} | Unknown error outside update: {e}.")
-        nick, name = ""
+        nick = ""
+        name = ""
     finally:
         print(f"nick: {nick}")
         print(f"name: {name}")
