@@ -386,49 +386,49 @@ async def get_data(i):
 
             for guild in clients[i].guilds:
                 try:
-                    async with asyncio.timeout(10):
-                        # handle different logic for bot nicknaming & data display
-                        if attributes[i][3] == "btc":
-                            nick = f"{tickers[i]}/{attributes[i][3].upper()} ₿{round(float(price), 4)}"
-                        elif attributes[i][1] == "defillama":
-                            nick = f"{tickers[i]} ${tvl:,}m"
-                        elif attributes[i][2] == "market_cap":
-                            nick = f"MCAP ${price:,}m"
-                        elif attributes[i][1] == "opensea":
-                            nick = f"{tickers[i]} Ξ{round(floor_price,2):,}"
-                        elif attributes[i][1] == "larvalabs":
-                            nick = f"{tickers[i]} {eth_floor}"
-                        elif attributes[i][1] == "beaconchain":
-                            nick = f"{tickers[i].lower()} blocks: {b_prop[1]}"
-                        elif attributes[i][1] == "tofunft":
-                            nick = f"{tickers[i]}: Ξ{floor}"
-                        elif attributes[i][1] == "dopexapi":
-                            nick = f"{tickers[i]} ${round(tvl_dict[tickers[i]],2):,}m"
-                        elif attributes[i][1] == "etherscan":
-                            nick = f"{fastGas:,} gwei ~{fastGasTime} sec"
-                        elif price < 1:
-                            nick = f"{tickers[i]} ${round(price,4):,}"
-                        else:
-                            nick = f"{tickers[i]} ${round(price,2):,}"
-                        # handle different logic for bot activity
-                        if attributes[i][2] == "market_cap":
-                            name = f"FDV: ${round(fdv,2):,}m"
-                        elif attributes[i][1] == "opensea":
-                            name = f"7d avg.: Ξ{round(pctchng,2)}"
-                        elif attributes[i][1] == "larvalabs":
-                            name = f"in USD: {usd_floor}"
-                        elif attributes[i][1] == "beaconchain":
-                            name = f"attestations: {a_exec[1]}"
-                        elif attributes[i][1] == "tofunft":
-                            name = f"Volume: Ξ{vol}"
-                        elif attributes[i][1] == "defillama":
-                            name = f"Vaults"
-                        elif attributes[i][1] == "dopexapi":
-                            name = f"Current Epoch"
-                        elif attributes[i][1] == "etherscan":
-                            name = f"Base: {suggestedBase} Priority: {fastPriority}"
-                        else:
-                            name = f"24h: {round(pctchng,2)}%"
+
+                    # handle different logic for bot nicknaming & data display
+                    if attributes[i][3] == "btc":
+                        nick = f"{tickers[i]}/{attributes[i][3].upper()} ₿{round(float(price), 4)}"
+                    elif attributes[i][1] == "defillama":
+                        nick = f"{tickers[i]} ${tvl:,}m"
+                    elif attributes[i][2] == "market_cap":
+                        nick = f"MCAP ${price:,}m"
+                    elif attributes[i][1] == "opensea":
+                        nick = f"{tickers[i]} Ξ{round(floor_price,2):,}"
+                    elif attributes[i][1] == "larvalabs":
+                        nick = f"{tickers[i]} {eth_floor}"
+                    elif attributes[i][1] == "beaconchain":
+                        nick = f"{tickers[i].lower()} blocks: {b_prop[1]}"
+                    elif attributes[i][1] == "tofunft":
+                        nick = f"{tickers[i]}: Ξ{floor}"
+                    elif attributes[i][1] == "dopexapi":
+                        nick = f"{tickers[i]} ${round(tvl_dict[tickers[i]],2):,}m"
+                    elif attributes[i][1] == "etherscan":
+                        nick = f"{fastGas:,} gwei ~{fastGasTime} sec"
+                    elif price < 1:
+                        nick = f"{tickers[i]} ${round(price,4):,}"
+                    else:
+                        nick = f"{tickers[i]} ${round(price,2):,}"
+                    # handle different logic for bot activity
+                    if attributes[i][2] == "market_cap":
+                        name = f"FDV: ${round(fdv,2):,}m"
+                    elif attributes[i][1] == "opensea":
+                        name = f"7d avg.: Ξ{round(pctchng,2)}"
+                    elif attributes[i][1] == "larvalabs":
+                        name = f"in USD: {usd_floor}"
+                    elif attributes[i][1] == "beaconchain":
+                        name = f"attestations: {a_exec[1]}"
+                    elif attributes[i][1] == "tofunft":
+                        name = f"Volume: Ξ{vol}"
+                    elif attributes[i][1] == "defillama":
+                        name = f"Vaults"
+                    elif attributes[i][1] == "dopexapi":
+                        name = f"Current Epoch"
+                    elif attributes[i][1] == "etherscan":
+                        name = f"Base: {suggestedBase} Priority: {fastPriority}"
+                    else:
+                        name = f"24h: {round(pctchng,2)}%"
                 except errors.Forbidden:
                     if guild not in errored_guilds:
                         print(
@@ -455,7 +455,7 @@ async def get_data(i):
     except Exception as e:
         print(f"{dt.utcnow()} | Unknown error outside update: {e}.")
         nick, name = ""
-        next(loop.__await__())
+        return nick, name
     return nick, name
 
 
