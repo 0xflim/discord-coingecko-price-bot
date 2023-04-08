@@ -156,7 +156,7 @@ async def on_ready():
 @tasks.loop(seconds=float(10))
 async def refresh_data():
     for i in range(len(clients)):
-        nick, name = await get_data(i)
+        nick, name = get_data(i)
         print("out of get_data")
         await asyncio.sleep(3)
         if nick == "":
