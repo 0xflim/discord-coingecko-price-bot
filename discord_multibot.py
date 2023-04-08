@@ -465,9 +465,7 @@ async def get_data(i):
 # Run the clients forever
 ################################################################################
 loop = asyncio.new_event_loop()
-t = []
 for i in range(len(clients)):
-    t.append(loop.create_task(clients[i].start(bot_tokens[i])))
-    print(t[i])
+    loop.create_task(clients[i].start(bot_tokens[i]))
 loop.run_forever()
 ################################################################################
