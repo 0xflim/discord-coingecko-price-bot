@@ -155,14 +155,30 @@ async def on_ready():
 
 @tasks.loop(seconds=float(10))
 async def refresh_data():
+    print(
+        f"{str(dt.utcnow())[:-7]} | in refresh_data, starting loop through clients...\n"
+    )
     for i in range(len(clients)):
+        print(f"{str(dt.utcnow())[:-7]} | Getting data for client (i) {i}.")
         nick, name = await get_data(i)
+        print(f"{str(dt.utcnow())[:-7]} | Received data for client (i) {i}.")
+        print(f"{str(dt.utcnow())[:-7]} | Nick: {nick}. Name: {name}.")
+        print(f"{str(dt.utcnow())[:-7]} | Sleeping for 3 seconds.")
         await asyncio.sleep(3)
         if nick == "":
+            print(
+                f"{str(dt.utcnow())[:-7]} | Nick = empty string. Sleeping for 5 seconds."
+            )
             await asyncio.sleep(5)
             pass
         else:
+            print(
+                f"{str(dt.utcnow())[:-7]} | Nick != empty string. Updating client across guilds..."
+            )
             for guild in clients[i].guilds:
+                print(
+                    f"{str(dt.utcnow())[:-7]} | guild.name: {guild.name}. Updating client across guilds..."
+                )
                 await guild.me.edit(nick=nick)
                 await clients[i].change_presence(
                     activity=Activity(
@@ -174,7 +190,9 @@ async def refresh_data():
 
 async def get_data(i):
     errored_guilds = []
+    print(f"{str(dt.utcnow())[:-7]} | in get_data, getting data... i = {i}")
     try:
+        print(f"{str(dt.utcnow())[:-7]} | inside outer try for get_data...")
         # pick which operation / API
         if attributes[i][1] == "opensea":
             r = requests.get(
@@ -378,8 +396,15 @@ async def get_data(i):
             )
         print(consolePrint)
 
+        # do we need to cycle through each guild to do this simple nick & name logic?
+        # will try print statements first
+        # may be able to delete the next line and go straight into the try / catch
         for guild in clients[i].guilds:
+            print(
+                f"{str(dt.utcnow())[:-7]} | guild.name: {guild.name}. client (i): {i}."
+            )
             try:
+                print(f"{str(dt.utcnow())[:-7]} | inside inner try for get_data...")
                 # handle different logic for bot nicknaming & data display
                 if attributes[i][3] == "btc":
                     nick = f"{tickers[i]}/{attributes[i][3].upper()} ₿{round(float(price), 4)}"
