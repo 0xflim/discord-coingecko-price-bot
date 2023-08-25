@@ -156,13 +156,14 @@ async def on_ready():
 @tasks.loop(seconds=float(10))
 async def refresh_data():
     print(
-        f"{str(dt.utcnow())[:-7]} | in refresh_data, starting loop through clients...\n"
+        f"\n{str(dt.utcnow())[:-7]} | in refresh_data, starting loop through clients..."
     )
     for i in range(len(clients)):
         print(f"{str(dt.utcnow())[:-7]} | Getting data for client (i) {i}.")
         nick, name = await get_data(i)
         print(f"{str(dt.utcnow())[:-7]} | Received data for client (i) {i}.")
-        print(f"{str(dt.utcnow())[:-7]} | Nick: {nick}. Name: {name}.")
+        print(f"{str(dt.utcnow())[:-7]} | Nick: {nick}.")
+        print(f"{str(dt.utcnow())[:-7]} | Name: {name}.")
         print(f"{str(dt.utcnow())[:-7]} | Sleeping for 3 seconds.")
         await asyncio.sleep(3)
         if nick == "":
@@ -176,9 +177,7 @@ async def refresh_data():
                 f"{str(dt.utcnow())[:-7]} | Nick != empty string. Updating client across guilds..."
             )
             for guild in clients[i].guilds:
-                print(
-                    f"{str(dt.utcnow())[:-7]} | guild.name: {guild.name}. Updating client across guilds..."
-                )
+                print(f"{str(dt.utcnow())[:-7]} | updating guild: {guild.name}...")
                 await guild.me.edit(nick=nick)
                 await clients[i].change_presence(
                     activity=Activity(
@@ -192,7 +191,7 @@ async def get_data(i):
     errored_guilds = []
     print(f"{str(dt.utcnow())[:-7]} | in get_data, getting data... i = {i}")
     try:
-        print(f"{str(dt.utcnow())[:-7]} | inside outer try for get_data...")
+        print(f"{str(dt.utcnow())[:-7]} | inside outer try (API calls) for get_data...")
         # pick which operation / API
         if attributes[i][1] == "opensea":
             r = requests.get(
@@ -399,69 +398,76 @@ async def get_data(i):
         # do we need to cycle through each guild to do this simple nick & name logic?
         # will try print statements first
         # may be able to delete the next line and go straight into the try / catch
-        for guild in clients[i].guilds:
+
+        # trying this 2023-08-24
+
+        # for guild in clients[i].guilds:
+        # print(
+        #     f"{str(dt.utcnow())[:-7]} | guild.name: {guild.name}. client (i): {i}."
+        # )
+        try:
             print(
-                f"{str(dt.utcnow())[:-7]} | guild.name: {guild.name}. client (i): {i}."
+                f"{str(dt.utcnow())[:-7]} | inside inner try (formatting nick & name) for get_data..."
             )
-            try:
-                print(f"{str(dt.utcnow())[:-7]} | inside inner try for get_data...")
-                # handle different logic for bot nicknaming & data display
-                if attributes[i][3] == "btc":
-                    nick = f"{tickers[i]}/{attributes[i][3].upper()} ₿{round(float(price), 4)}"
-                elif attributes[i][1] == "defillama":
-                    nick = f"{tickers[i]} ${tvl:,}m"
-                elif attributes[i][2] == "market_cap":
-                    nick = f"MCAP ${price:,}m"
-                elif attributes[i][1] == "opensea":
-                    nick = f"{tickers[i]} Ξ{round(floor_price,2):,}"
-                elif attributes[i][1] == "larvalabs":
-                    nick = f"{tickers[i]} {eth_floor}"
-                elif attributes[i][1] == "beaconchain":
-                    nick = f"{tickers[i].lower()} blocks: {b_prop[1]}"
-                elif attributes[i][1] == "tofunft":
-                    nick = f"{tickers[i]}: Ξ{floor}"
-                elif attributes[i][1] == "dopexapi":
-                    nick = f"{tickers[i]} ${round(tvl_dict[tickers[i]],2):,}m"
-                elif attributes[i][1] == "etherscan":
-                    nick = f"{fastGas:,} gwei ~{fastGasTime} sec"
-                elif price < 1:
-                    nick = f"{tickers[i]} ${round(price,4):,}"
-                else:
-                    nick = f"{tickers[i]} ${round(price,2):,}"
-                # handle different logic for bot activity
-                if attributes[i][2] == "market_cap":
-                    name = f"FDV: ${round(fdv,2):,}m"
-                elif attributes[i][1] == "opensea":
-                    name = f"7d avg.: Ξ{round(pctchng,2)}"
-                elif attributes[i][1] == "larvalabs":
-                    name = f"in USD: {usd_floor}"
-                elif attributes[i][1] == "beaconchain":
-                    name = f"attestations: {a_exec[1]}"
-                elif attributes[i][1] == "tofunft":
-                    name = f"Volume: Ξ{vol}"
-                elif attributes[i][1] == "defillama":
-                    name = f"Vaults"
-                elif attributes[i][1] == "dopexapi":
-                    name = f"Current Epoch"
-                elif attributes[i][1] == "etherscan":
-                    name = f"Base: {suggestedBase} Priority: {fastPriority}"
-                else:
-                    name = f"24h: {round(pctchng,2)}%"
-            except errors.Forbidden:
-                if guild not in errored_guilds:
-                    print(
-                        f"{str(dt.utcnow())[:-7]} | {guild}:{guild.id} hasn't set "
-                        "nickname permissions for the bot!"
-                    )
-                errored_guilds.append(guild)
-                nick = ""
-                name = ""
-                break
-            except Exception as e:
-                print(f"{str(dt.utcnow())[:-7]} | Unknown error within update: {e}.")
-                print(nick, name)
-                nick = ""
-                name = ""
+            # handle different logic for bot nicknaming & data display
+            if attributes[i][3] == "btc":
+                nick = (
+                    f"{tickers[i]}/{attributes[i][3].upper()} ₿{round(float(price), 4)}"
+                )
+            elif attributes[i][1] == "defillama":
+                nick = f"{tickers[i]} ${tvl:,}m"
+            elif attributes[i][2] == "market_cap":
+                nick = f"MCAP ${price:,}m"
+            elif attributes[i][1] == "opensea":
+                nick = f"{tickers[i]} Ξ{round(floor_price,2):,}"
+            elif attributes[i][1] == "larvalabs":
+                nick = f"{tickers[i]} {eth_floor}"
+            elif attributes[i][1] == "beaconchain":
+                nick = f"{tickers[i].lower()} blocks: {b_prop[1]}"
+            elif attributes[i][1] == "tofunft":
+                nick = f"{tickers[i]}: Ξ{floor}"
+            elif attributes[i][1] == "dopexapi":
+                nick = f"{tickers[i]} ${round(tvl_dict[tickers[i]],2):,}m"
+            elif attributes[i][1] == "etherscan":
+                nick = f"{fastGas:,} gwei ~{fastGasTime} sec"
+            elif price < 1:
+                nick = f"{tickers[i]} ${round(price,4):,}"
+            else:
+                nick = f"{tickers[i]} ${round(price,2):,}"
+            # handle different logic for bot activity
+            if attributes[i][2] == "market_cap":
+                name = f"FDV: ${round(fdv,2):,}m"
+            elif attributes[i][1] == "opensea":
+                name = f"7d avg.: Ξ{round(pctchng,2)}"
+            elif attributes[i][1] == "larvalabs":
+                name = f"in USD: {usd_floor}"
+            elif attributes[i][1] == "beaconchain":
+                name = f"attestations: {a_exec[1]}"
+            elif attributes[i][1] == "tofunft":
+                name = f"Volume: Ξ{vol}"
+            elif attributes[i][1] == "defillama":
+                name = f"Vaults"
+            elif attributes[i][1] == "dopexapi":
+                name = f"Current Epoch"
+            elif attributes[i][1] == "etherscan":
+                name = f"Base: {suggestedBase} Priority: {fastPriority}"
+            else:
+                name = f"24h: {round(pctchng,2)}%"
+        # except errors.Forbidden:
+        # if guild not in errored_guilds:
+        #     print(
+        #         f"{str(dt.utcnow())[:-7]} | {guild}:{guild.id} hasn't set "
+        #             "nickname permissions for the bot!"
+        #         )
+        # errored_guilds.append(guild)
+        # nick = ""
+        # name = ""
+        # break
+        except Exception as e:
+            print(f"{str(dt.utcnow())[:-7]} | Unknown error within update: {e}.")
+            print(nick, name)
+            nick = ""
+            name = ""
     except ValueError as e:
         print(f"{str(dt.utcnow())[:-7]} | ValueError: {e}.")
         nick = ""
