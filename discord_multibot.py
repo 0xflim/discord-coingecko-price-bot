@@ -174,10 +174,10 @@ async def refresh_data():
             pass
         else:
             print(
-                f"{str(dt.utcnow())[:-7]} | Nick != empty string. Updating client across guilds..."
+                f"{str(dt.utcnow())[:-7]} | Nick != empty string. Updating {tickers[i]} across guilds..."
             )
             for guild in clients[i].guilds:
-                print(f"{str(dt.utcnow())[:-7]} | updating guild: {guild.name}...")
+                print(f"{str(dt.utcnow())[:-7]} | updating guild {guild.name}...")
                 await guild.me.edit(nick=nick)
                 await clients[i].change_presence(
                     activity=Activity(
@@ -221,9 +221,9 @@ async def get_data(i):
         elif attributes[i][1] == "etherscan":
             r = requests.get(
                 "https://api.etherscan.io/api"
-                "?module=gastracke"
-                "r&action=gasorac"
-                f"le&apikey={attributes[i][2]}"
+                "?module=gastracker"
+                "&action=gasoracle"
+                f"&apikey={attributes[i][2]}"
             )
             fastGas = int(r.json()["result"]["FastGasPrice"])
             rawSuggestedBase = r.json()["result"]["suggestBaseFee"]
@@ -272,17 +272,17 @@ async def get_data(i):
             blocks = soup.find("span", attrs={"id": "blockCount"})
             block_stats = blocks.attrs["title"].split("Blocks (")[1]
             b_prop = block_stats.split(", ")[0].split(": ")
-            b_miss = block_stats.split(", ")[1].split(": ")
-            b_orph = block_stats.split(", ")[2].split(": ")
-            b_sche = block_stats.split(", ")[3].split(": ")
+            # b_miss = block_stats.split(", ")[1].split(": ")
+            # b_orph = block_stats.split(", ")[2].split(": ")
+            # b_sche = block_stats.split(", ")[3].split(": ")
 
             attestations = soup.find("span", attrs={"id": "attestationCount"})
             attestation_stats = attestations.attrs["title"].split(
                 "Attestation Assignments ("
             )[1]
             a_exec = attestation_stats.split(", ")[0].split(": ")
-            a_miss = attestation_stats.split(", ")[1].split(": ")
-            a_orph = attestation_stats.split(", ")[2].split(": ")
+            # a_miss = attestation_stats.split(", ")[1].split(": ")
+            # a_orph = attestation_stats.split(", ")[2].split(": ")
         elif attributes[i][1] == "tofunft":
             soup = BeautifulSoup(page, "html.parser")
             script = soup.find(id="__NEXT_DATA__").string
